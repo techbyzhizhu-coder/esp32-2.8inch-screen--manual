@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ESP32 2.8\" TFT Touch Display Module | Official Guide</title>
+  <meta name="description" content="Official quick start guide, specifications, pinout, Arduino and MicroPython examples, and demo downloads for the ESP32 2.8-inch TFT touch display module." />
+  <style>
+    :root{
+      --bg:#0b1020;
+      --bg2:#101932;
+      --card:#121c39;
+      --card2:#ffffff;
+      --text:#eef4ff;
+      --muted:#b8c6e4;
+      --line:rgba(255,255,255,.1);
+      --accent:#6ea8ff;
+      --accent2:#7cf0c9;
+      --shadow:0 20px 60px rgba(0,0,0,.28);
+      --radius:24px;
+      --radius-sm:18px;
+      --max:1180px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at 20% 10%, rgba(110,168,255,.18), transparent 18rem),
+        radial-gradient(circle at 90% 20%, rgba(124,240,201,.13), transparent 18rem),
+        linear-gradient(180deg,var(--bg),#0b1227 45%, #0a1121 100%);
+    }
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block}
+    .container{max-width:var(--max);margin:0 auto;padding:0 22px}
+    .nav{
+      position:sticky;top:0;z-index:50;
+      backdrop-filter: blur(14px);
+      background:rgba(10,17,33,.72);
+      border-bottom:1px solid var(--line);
+    }
+    .nav-inner{
+      max-width:var(--max);margin:0 auto;padding:14px 22px;
+      display:flex;align-items:center;justify-content:space-between;gap:20px;
+    }
+    .brand{
+      display:flex;align-items:center;gap:12px;font-weight:800;letter-spacing:.2px
+    }
+    .brand-badge{
+      width:40px;height:40px;border-radius:12px;
+      background:linear-gradient(135deg,var(--accent),#4f71ff);
+      display:grid;place-items:center;box-shadow:var(--shadow);font-weight:900
+    }
+    .nav-links{display:flex;gap:18px;flex-wrap:wrap;color:var(--muted);font-size:14px}
+    .hero{padding:54px 0 24px}
+    .hero-grid{
+      display:grid;grid-template-columns:1.15fr .85fr;gap:28px;align-items:center
+    }
+    .eyebrow{
+      display:inline-flex;gap:10px;align-items:center;padding:10px 14px;border-radius:999px;
+      border:1px solid var(--line);background:rgba(255,255,255,.04);color:var(--muted);font-size:14px
+    }
+    .dot{width:8px;height:8px;border-radius:999px;background:var(--accent2);box-shadow:0 0 18px var(--accent2)}
+    h1{
+      font-size:clamp(2.4rem,5.2vw,4.7rem);line-height:1.03;margin:18px 0 16px;letter-spacing:-.03em
+    }
+    .hero p{
+      color:var(--muted);font-size:clamp(1rem,1.7vw,1.18rem);line-height:1.8;max-width:62ch
+    }
+    .badges{display:flex;gap:10px;flex-wrap:wrap;margin:22px 0}
+    .badge{
+      padding:10px 14px;border-radius:999px;
+      background:rgba(255,255,255,.06);border:1px solid var(--line);font-size:14px;color:#dce7ff
+    }
+    .cta-row{display:flex;gap:14px;flex-wrap:wrap;margin-top:26px}
+    .btn{
+      padding:14px 18px;border-radius:16px;font-weight:700;
+      display:inline-flex;align-items:center;gap:10px;border:1px solid transparent;
+      transition:transform .18s ease, box-shadow .18s ease, background .18s ease;
+      box-shadow:var(--shadow)
+    }
+    .btn:hover{transform:translateY(-2px)}
+    .btn-primary{background:linear-gradient(135deg,#79b2ff,#5f79ff);color:white}
+    .btn-secondary{background:rgba(255,255,255,.06);border-color:var(--line);color:#f2f6ff}
+    .hero-card{
+      position:relative;padding:18px;border-radius:32px;background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.03));
+      border:1px solid var(--line);box-shadow:var(--shadow);overflow:hidden
+    }
+    .hero-card:before,.hero-card:after{
+      content:"";position:absolute;border-radius:50%;filter:blur(4px)
+    }
+    .hero-card:before{width:220px;height:220px;background:rgba(110,168,255,.24);top:-60px;right:-30px}
+    .hero-card:after{width:180px;height:180px;background:rgba(124,240,201,.18);bottom:-50px;left:-20px}
+    .panel{
+      position:relative;border-radius:26px;overflow:hidden;background:#0a1731;border:1px solid rgba(255,255,255,.08)
+    }
+    .panel img{width:100%;height:auto}
+    .stats{
+      display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:30px 0 8px
+    }
+    .stat{
+      background:rgba(255,255,255,.05);border:1px solid var(--line);border-radius:20px;padding:18px
+    }
+    .stat strong{display:block;font-size:1.35rem;margin-bottom:6px}
+    section{padding:46px 0}
+    .section-title{
+      font-size:clamp(1.7rem,3vw,2.6rem);margin:0 0 12px;letter-spacing:-.02em
+    }
+    .section-sub{color:var(--muted);max-width:68ch;line-height:1.8;margin:0 0 24px}
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    .grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
+    .card{
+      background:rgba(255,255,255,.05);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:22px;
+      box-shadow:var(--shadow)
+    }
+    .card.light{
+      background:linear-gradient(180deg,#ffffff,#f7f9ff);
+      color:#1d2540;border-color:rgba(18,28,57,.08)
+    }
+    .icon{
+      width:44px;height:44px;border-radius:14px;display:grid;place-items:center;
+      background:linear-gradient(135deg,#78b3ff,#5f79ff);margin-bottom:14px;font-size:22px
+    }
+    .card h3{margin:0 0 10px;font-size:1.15rem}
+    .card p,.card li{color:var(--muted);line-height:1.75}
+    .card.light p,.card.light li{color:#495372}
+    ul.clean{margin:10px 0 0 18px;padding:0}
+    .spec-table{width:100%;border-collapse:collapse;overflow:hidden;border-radius:20px}
+    .spec-table th,.spec-table td{padding:15px 16px;border-bottom:1px solid rgba(255,255,255,.08);text-align:left}
+    .spec-table th{color:#d6e3ff;width:36%;font-weight:700;background:rgba(255,255,255,.04)}
+    .spec-wrap{overflow:auto;border-radius:24px;border:1px solid var(--line);background:rgba(255,255,255,.04)}
+    .pin-layout{
+      display:grid;grid-template-columns:.95fr 1.05fr;gap:22px;align-items:start
+    }
+    .mini-table{width:100%;border-collapse:collapse}
+    .mini-table th,.mini-table td{padding:11px 12px;border-bottom:1px solid rgba(255,255,255,.08);text-align:left}
+    .mini-table th{color:#d7e3ff}
+    .steps{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+    .step{
+      position:relative;padding:24px 22px 22px 74px;border-radius:22px;background:rgba(255,255,255,.05);border:1px solid var(--line)
+    }
+    .step-num{
+      position:absolute;left:18px;top:18px;width:40px;height:40px;border-radius:14px;display:grid;place-items:center;
+      background:linear-gradient(135deg,#79b2ff,#5f79ff);font-weight:800
+    }
+    pre{
+      margin:0;background:#091224;color:#cde0ff;padding:18px;border-radius:18px;overflow:auto;
+      border:1px solid rgba(255,255,255,.08);line-height:1.6;font-size:14px
+    }
+    .download-list{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+    .download{
+      display:flex;justify-content:space-between;gap:16px;align-items:center;
+      padding:18px 18px;border-radius:20px;background:rgba(255,255,255,.05);border:1px solid var(--line)
+    }
+    .download small{display:block;color:var(--muted);margin-top:6px}
+    .download .btn{padding:12px 14px;border-radius:14px;box-shadow:none}
+    details{
+      background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:18px;padding:16px 18px
+    }
+    details + details{margin-top:12px}
+    summary{cursor:pointer;font-weight:700}
+    summary::marker{color:var(--accent)}
+    .footer{
+      padding:42px 0 60px;color:var(--muted)
+    }
+    .footer-box{
+      border:1px solid var(--line);background:rgba(255,255,255,.04);padding:22px;border-radius:24px
+    }
+    .notice{margin-top:18px;padding:16px 18px;border-radius:18px;background:#e6f4ff;border:1px solid #8fbfff;color:#12325b;font-weight:600}
+    @media (max-width: 980px){
+      .hero-grid,.grid-3,.grid-2,.pin-layout,.steps,.download-list{grid-template-columns:1fr}
+      .stats{grid-template-columns:repeat(2,1fr)}
+    }
+    @media (max-width: 640px){
+      .nav-links{display:none}
+      .stats{grid-template-columns:1fr 1fr}
+      .container{padding:0 16px}
+      .hero{padding-top:28px}
+    }
+  </style>
+</head>
+<body>
+  <div class="nav">
+    <div class="nav-inner">
+      <div class="brand">
+        <div class="brand-badge">E</div>
+        <div>ESP32 2.8\" TFT Display</div>
+      </div>
+      <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#specs">Specs</a>
+        <a href="#pinout">Pinout</a>
+        <a href="#quickstart">Quick Start</a>
+        <a href="#downloads">Downloads</a>
+        <a href="#faq">FAQ</a>
+      </div>
+    </div>
+  </div>
+
+  <header class="hero">
+    <div class="container hero-grid">
+      <div>
+        <div class="eyebrow"><span class="dot"></span> Beginner-friendly smart display board for makers, students, and engineers</div>
+        <h1>Build colorful ESP32 interfaces in minutes.</h1>
+        <p>
+          A compact <strong>2.8-inch TFT touch display module</strong> powered by ESP32, built for fast prototyping,
+          UI demos, sensor dashboards, and Wi-Fi connected projects. This page includes the official quick start guide,
+          core specifications, pinout reference, sample code, and ready-to-use demo downloads.
+        </p>
+        <div class="badges">
+          <span class="badge">ILI9341 Driver</span>
+          <span class="badge">320 × 240 Resolution</span>
+          <span class="badge">XPT2046 Touch</span>
+          <span class="badge">Wi-Fi + Bluetooth</span>
+          <span class="badge">TF Card Slot</span>
+          <span class="badge">Arduino + MicroPython</span>
+        </div>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="#downloads">⬇ Download Demo Pack</a>
+          <a class="btn btn-secondary" href="#quickstart">⚡ Start in 5 Minutes</a>
+          <a class="btn btn-secondary" href="#pinout">🔎 View Pinout</a>
+        </div>
+      </div>
+      <div class="hero-card">
+        <div class="panel">
+          <img src="hero_cover_en.png" alt="ESP32 2.8-inch TFT touch display module hero cover" />
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="stats">
+        <div class="stat"><strong>240 MHz</strong><span>Dual-core ESP32 performance</span></div>
+        <div class="stat"><strong>65K</strong><span>RGB color display output</span></div>
+        <div class="stat"><strong>22 IOs</strong><span>Rich expansion capability</span></div>
+        <div class="stat"><strong>5V USB</strong><span>Simple power and data connection</span></div>
+      </div>
+    </div>
+  </header>
+
+  <section id="features">
+    <div class="container">
+      <h2 class="section-title">Why customers choose this display board</h2>
+      <p class="section-sub">
+        This module is designed to lower the barrier to embedded UI development. Beginners can flash demo firmware quickly,
+        while engineers can build custom interfaces with Arduino or MicroPython.
+      </p>
+      <div class="grid-3">
+        <div class="card">
+          <div class="icon">⚙️</div>
+          <h3>Powerful ESP32 core</h3>
+          <p>Low-power dual-core 32-bit CPU with clock speed up to 240 MHz and 520 KB SRAM for responsive display projects.</p>
+        </div>
+        <div class="card">
+          <div class="icon">🎨</div>
+          <h3>Bright 2.8-inch TFT screen</h3>
+          <p>2.8-inch TFT panel driven by ILI9341 with 320 × 240 resolution and 65K color output for dashboards, clocks, and UI demos.</p>
+        </div>
+        <div class="card">
+          <div class="icon">👆</div>
+          <h3>Touch-ready interaction</h3>
+          <p>XPT2046 resistive touch controller enables menus, buttons, and interactive control panels for smart devices.</p>
+        </div>
+        <div class="card">
+          <div class="icon">📶</div>
+          <h3>Wireless connectivity</h3>
+          <p>Built-in Wi-Fi 802.11 b/g/n and Bluetooth 4.2 support make it ideal for IoT, smart home panels, and remote monitoring.</p>
+        </div>
+        <div class="card">
+          <div class="icon">💾</div>
+          <h3>More storage with TF card</h3>
+          <p>Integrated TF card interface helps store images, fonts, and UI resources for richer display applications.</p>
+        </div>
+        <div class="card">
+          <div class="icon">🧪</div>
+          <h3>Made for demos and learning</h3>
+          <p>Includes flash tool package and multiple demo firmware files so users can verify the hardware before writing code.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="usecases">
+    <div class="container">
+      <div class="grid-2">
+        <div class="card light">
+          <h2 class="section-title" style="font-size:2rem;margin-top:0">Popular project ideas</h2>
+          <ul class="clean">
+            <li><strong>Temperature & humidity monitor:</strong> display live DHT22 sensor values on a colorful dashboard.</li>
+            <li><strong>Weather clock:</strong> combine Wi-Fi time sync with forecast data for a smart desktop screen.</li>
+            <li><strong>Smart home control panel:</strong> build touch-based controls for lights, appliances, or automation scenes.</li>
+            <li><strong>Product prototype UI:</strong> create menus, icons, and setting pages for embedded device development.</li>
+          </ul>
+          
+        </div>
+        <div class="card">
+          <img src="product_board_photo.png" alt="ESP32 TFT display board product photo" style="border-radius:18px;margin-bottom:16px">
+          <h3>What’s in the package</h3>
+          <ul class="clean">
+            <li>ESP32 main board with 2.8-inch TFT display</li>
+            <li>Resistive touch panel (XPT2046)</li>
+            <li>USB power and data interface</li>
+            <li>Expansion connectors for I2C, UART, RGB LED, and TF card</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="specs">
+    <div class="container">
+      <h2 class="section-title">Technical specifications</h2>
+      <p class="section-sub">
+        
+      </p>
+      <div class="spec-wrap">
+        <table class="spec-table">
+          <tr><th>Product name</th><td>ESP32 Wi-Fi + Bluetooth dual-mode development board display module</td></tr>
+          <tr><th>MCU</th><td>ESP32 dual-core 32-bit CPU</td></tr>
+          <tr><th>CPU clock</th><td>Up to 240 MHz</td></tr>
+          <tr><th>Compute capability</th><td>Up to 600 DMIPS</td></tr>
+          <tr><th>SRAM</th><td>520 KB</td></tr>
+          <tr><th>Display type</th><td>2.8-inch TFT LCD</td></tr>
+          <tr><th>Display driver</th><td>ILI9341</td></tr>
+          <tr><th>Touch controller</th><td>XPT2046</td></tr>
+          <tr><th>Resolution</th><td>320 × 240</td></tr>
+          <tr><th>Display colors</th><td>65K RGB colors</td></tr>
+          <tr><th>Active viewing area</th><td>43.2 × 57.6 mm</td></tr>
+          <tr><th>Viewing angle</th><td>Greater than 60°</td></tr>
+          <tr><th>Operating temperature</th><td>-20°C to 70°C</td></tr>
+          <tr><th>Operating voltage</th><td>5V</td></tr>
+          <tr><th>Typical current</th><td>115 mA</td></tr>
+          <tr><th>Wireless</th><td>Wi-Fi 802.11 b/g/n, Bluetooth 4.2 BR/EDR and BLE</td></tr>
+          <tr><th>Supported interfaces</th><td>UART, SPI, SDIO, I2C, IR, ADC, DAC, PWM</td></tr>
+          <tr><th>GPIO count</th><td>22</td></tr>
+          <tr><th>Default serial baud rate</th><td>115200 bps</td></tr>
+          <tr><th>RF frequency range</th><td>2412 to 2484 MHz</td></tr>
+          <tr><th>Antenna</th><td>Onboard PCB antenna, 2 dBi gain</td></tr>
+          <tr><th>Security</th><td>WPA / WPA2 / WPA2-Enterprise / WPS</td></tr>
+          <tr><th>Wireless sensitivity</th><td>CCK 1 Mbps: -90 dBm; CCK 11 Mbps: -85 dBm; 6 Mbps (1/2 BPSK): -88 dBm; 54 Mbps: -70 dBm; MCS7: -67 dBm</td></tr>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section id="pinout">
+    <div class="container">
+      <h2 class="section-title">Pinout and interface reference</h2>
+      <p class="section-sub">
+        The board image below has been translated into English and reorganized for easier setup. Touch, storage, RGB LED, and expansion connectors are shown on the board diagram.
+      </p>
+      <div class="pin-layout">
+        <div class="card">
+          <img src="pinout_en.png" alt="ESP32 TFT display pinout diagram in English" style="border-radius:18px">
+        </div>
+        <div class="card">
+          <h3>Core pin groups</h3>
+          <table class="mini-table">
+            <tr><th>Function group</th><th>GPIO mapping</th></tr>
+            <tr><td>Touch controller</td><td>CLK IO25, CS IO33, DIN IO32, OUT IO39, IRQ IO36</td></tr>
+            <tr><td>Backlight LED</td><td>IO21</td></tr>
+            <tr><td>TF card</td><td>CD/DAT3 IO5, CMD IO23, CLK IO18, DAT0 IO19</td></tr>
+            <tr><td>RGB LED</td><td>IO17, IO4, IO16</td></tr>
+            <tr><td>Expansion IO1</td><td>GND, IO35 (ADC1_CH7, input only), IO22 (I2C SCL), IO21 (I2C SDA)</td></tr>
+            <tr><td>Expansion IO2</td><td>GND, IO22 (I2C SCL), IO27 (TOUCH7 / ADC2_CH7), 3.3V</td></tr>
+            <tr><td>UART connector</td><td>VIN, TX, RX, GND</td></tr>
+            <tr><td>Power / data</td><td>USB Type-C and USB Micro</td></tr>
+          </table>
+          
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="quickstart">
+    <div class="container">
+      <h2 class="section-title">Quick start in 5 minutes</h2>
+      
+      <div class="steps">
+        <div class="step"><div class="step-num">1</div><strong>Connect the board</strong><br><span style="color:var(--muted)">Use a USB cable to connect the module to your computer. The board supports USB power and data.</span></div>
+        <div class="step"><div class="step-num">2</div><strong>Test with demo firmware</strong><br><span style="color:var(--muted)">Use the included flash download tool and one of the demo BIN files to verify the screen and touch hardware quickly.</span></div>
+        <div class="step"><div class="step-num">3</div><strong>Arduino setup</strong><br><span style="color:var(--muted)">Install Arduino IDE, add ESP32 board support, and install the TFT_eSPI library. Then configure the library for your board version.</span></div>
+        <div class="step"><div class="step-num">4</div><strong>MicroPython setup</strong><br><span style="color:var(--muted)">Flash a MicroPython firmware build for ESP32, upload an ILI9341 driver module, then run the example script shown below.</span></div>
+      </div>
+      <div class="grid-2" style="margin-top:22px">
+        <div class="card">
+          <h3>Arduino example</h3>
+<pre>#include &lt;TFT_eSPI.h&gt;
+
+TFT_eSPI tft = TFT_eSPI();
+
+void setup() {
+  tft.init();
+  tft.setRotation(1);
+  tft.fillScreen(TFT_BLACK);
+  tft.setTextColor(TFT_WHITE, TFT_BLACK);
+  tft.drawString("Hello Aurevita", 40, 120, 4);
+}
+
+void loop() {
+}</pre>
+        </div>
+        <div class="card">
+          <h3>MicroPython example</h3>
+<pre>from machine import Pin, SPI
+import ili9341
+
+spi = SPI(1, baudrate=40000000, sck=Pin(18), mosi=Pin(23), miso=Pin(19))
+display = ili9341.ILI9341(spi, cs=Pin(5), dc=Pin(2), rst=Pin(4))
+
+display.fill(0)
+display.text("Hello Aurevita", 30, 120)</pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="downloads">
+    <div class="container">
+      <h2 class="section-title">Downloads and demo resources</h2>
+      
+      <div class="download-list">
+        <div class="download">
+          <div><strong>Flash Download Tool</strong><small>Use this tool to write BIN firmware to the board.</small></div>
+          <a class="btn btn-primary" href="ESP32_Flash_Download_Tool_v3_9_3.zip" download>Download</a>
+        </div>
+        <div class="download">
+          <div><strong>LVGL Demo 2.8R</strong><small>Graphical demo firmware for screen and UI testing.</small></div>
+          <a class="btn btn-primary" href="LVGL_DEMO_2_8R.bin" download>Download</a>
+        </div>
+        <div class="download">
+          <div><strong>RGB JPG Demo</strong><small>Sample display firmware for image and color output.</small></div>
+          <a class="btn btn-primary" href="RGB_JPG_Demo.bin" download>Download</a>
+        </div>
+        <div class="download">
+          <div><strong>Clock Demo 22:12</strong><small>Clock-style firmware for quick visual verification.</small></div>
+          <a class="btn btn-primary" href="Clock_Demo_22_12.bin" download>Download</a>
+        </div>
+        <div class="download">
+          <div><strong>Ripple Transition Demo</strong><small>Animated effect demo firmware.</small></div>
+          <a class="btn btn-primary" href="Ripple_Transition_Demo.bin" download>Download</a>
+        </div>
+        <div class="download">
+          <div><strong>Color Test Demo</strong><small>Screen color verification firmware.</small></div>
+          <a class="btn btn-primary" href="Color_Test_Demo.bin" download>Download</a>
+        </div>
+      </div>
+
+      
+    </div>
+  </section>
+
+  <section id="faq">
+    <div class="container">
+      <h2 class="section-title">FAQ and troubleshooting</h2>
+      <div class="grid-2">
+        <div>
+          <details open>
+            <summary>The screen does not light up. What should I check?</summary>
+            <p>Check USB power first, then confirm the board was flashed successfully. If your firmware controls backlight separately, verify the backlight pin configuration.</p>
+          </details>
+          <details>
+            <summary>The display shows noise or corrupted graphics.</summary>
+            <p>This is usually caused by incorrect display pin mapping, SPI configuration, or a mismatched TFT_eSPI setup file. Verify the board-specific library settings.</p>
+          </details>
+          <details>
+            <summary>Touch input is not responding.</summary>
+            <p>Confirm the XPT2046 touch pins match the board diagram. Touch also needs the correct CS and IRQ configuration in your code.</p>
+          </details>
+        </div>
+        <div>
+          <details open>
+            <summary>The board cannot be detected for flashing.</summary>
+            <p>Try a different USB cable, install the correct serial driver if required by your PC, and confirm the correct COM port is selected in the flash tool or IDE.</p>
+          </details>
+          <details>
+            <summary>Which language should beginners start with?</summary>
+            <p>Arduino is the easiest starting point because the ecosystem has more display examples. MicroPython is a good next step for faster experimentation.</p>
+          </details>
+          <details>
+            <summary>Can I use this board for customer-facing UI prototypes?</summary>
+            <p>Yes. It is well suited for proof-of-concept interfaces, device dashboards, and internal demo systems. For production, validate long-term power and enclosure requirements.</p>
+          </details>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  
+</body>
+</html>
