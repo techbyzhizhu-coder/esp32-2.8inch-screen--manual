@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ESP32 2.8\" TFT Touch Display Module | Official Guide</title>
-  <meta name="description" content="Official quick start guide, specifications, pinout, Arduino and MicroPython examples, and demo downloads for the ESP32 2.8-inch TFT touch display module." />
+  <title>ESP32 2.8\" ST7789 TFT Touch Display Module | Official Guide</title>
+  <meta name="description" content="Official quick start guide, specifications, pinout, Arduino and MicroPython examples, and firmware downloads for the ESP32 2.8-inch ST7789 TFT touch display module." />
   <style>
     :root{
       --bg:#0b1020;
@@ -189,7 +189,7 @@
     <div class="nav-inner">
       <div class="brand">
         <div class="brand-badge">E</div>
-        <div>ESP32 2.8\" TFT Display</div>
+        <div>ESP32 2.8\" ST7789 TFT Display</div>
       </div>
       <div class="nav-links">
         <a href="#features">Features</a>
@@ -208,12 +208,12 @@
         <div class="eyebrow"><span class="dot"></span> Beginner-friendly smart display board for makers, students, and engineers</div>
         <h1>Build colorful ESP32 interfaces in minutes.</h1>
         <p>
-          A compact <strong>2.8-inch TFT touch display module</strong> powered by ESP32, built for fast prototyping,
+          A compact <strong>2.8-inch ST7789 TFT touch display module</strong> powered by ESP32, built for fast prototyping,
           UI demos, sensor dashboards, and Wi-Fi connected projects. This page includes the official quick start guide,
-          core specifications, pinout reference, sample code, and ready-to-use demo downloads.
+          core specifications, pinout reference, sample code, and firmware download.
         </p>
         <div class="badges">
-          <span class="badge">ILI9341 Driver</span>
+          <span class="badge">ST7789 Driver</span>
           <span class="badge">320 × 240 Resolution</span>
           <span class="badge">XPT2046 Touch</span>
           <span class="badge">Wi-Fi + Bluetooth</span>
@@ -221,7 +221,7 @@
           <span class="badge">Arduino + MicroPython</span>
         </div>
         <div class="cta-row">
-          <a class="btn btn-primary" href="#downloads">⬇ Download Demo Pack</a>
+          <a class="btn btn-primary" href="#downloads">⬇ Download Firmware</a>
           <a class="btn btn-secondary" href="#quickstart">⚡ Start in 5 Minutes</a>
           <a class="btn btn-secondary" href="#pinout">🔎 View Pinout</a>
         </div>
@@ -247,7 +247,7 @@
     <div class="container">
       <h2 class="section-title">Why customers choose this display board</h2>
       <p class="section-sub">
-        This module is designed to lower the barrier to embedded UI development. Beginners can flash demo firmware quickly,
+        This module is designed to lower the barrier to embedded UI development. Beginners can flash the supplied firmware quickly,
         while engineers can build custom interfaces with Arduino or MicroPython.
       </p>
       <div class="grid-3">
@@ -259,7 +259,7 @@
         <div class="card">
           <div class="icon">🎨</div>
           <h3>Bright 2.8-inch TFT screen</h3>
-          <p>2.8-inch TFT panel driven by ILI9341 with 320 × 240 resolution and 65K color output for dashboards, clocks, and UI demos.</p>
+          <p>2.8-inch TFT panel driven by ST7789 with 320 × 240 resolution and 65K color output for dashboards, clocks, and UI demos.</p>
         </div>
         <div class="card">
           <div class="icon">👆</div>
@@ -279,7 +279,7 @@
         <div class="card">
           <div class="icon">🧪</div>
           <h3>Made for demos and learning</h3>
-          <p>Includes flash tool package and multiple demo firmware files so users can verify the hardware before writing code.</p>
+          <p>Includes a flash download tool and the supplied firmware so users can verify the hardware before writing code.</p>
         </div>
       </div>
     </div>
@@ -326,7 +326,7 @@
           <tr><th>Compute capability</th><td>Up to 600 DMIPS</td></tr>
           <tr><th>SRAM</th><td>520 KB</td></tr>
           <tr><th>Display type</th><td>2.8-inch TFT LCD</td></tr>
-          <tr><th>Display driver</th><td>ILI9341</td></tr>
+          <tr><th>Display driver</th><td>ST7789</td></tr>
           <tr><th>Touch controller</th><td>XPT2046</td></tr>
           <tr><th>Resolution</th><td>320 × 240</td></tr>
           <tr><th>Display colors</th><td>65K RGB colors</td></tr>
@@ -383,14 +383,26 @@
       
       <div class="steps">
         <div class="step"><div class="step-num">1</div><strong>Connect the board</strong><br><span style="color:var(--muted)">Use a USB cable to connect the module to your computer. The board supports USB power and data.</span></div>
-        <div class="step"><div class="step-num">2</div><strong>Test with demo firmware</strong><br><span style="color:var(--muted)">Use the included flash download tool and one of the demo BIN files to verify the screen and touch hardware quickly.</span></div>
+        <div class="step"><div class="step-num">2</div><strong>Test with firmware</strong><br><span style="color:var(--muted)">Use the included flash download tool and the supplied firmware BIN file to verify the screen and touch hardware quickly.</span></div>
         <div class="step"><div class="step-num">3</div><strong>Arduino setup</strong><br><span style="color:var(--muted)">Install Arduino IDE, add ESP32 board support, and install the TFT_eSPI library. Then configure the library for your board version.</span></div>
-        <div class="step"><div class="step-num">4</div><strong>MicroPython setup</strong><br><span style="color:var(--muted)">Flash a MicroPython firmware build for ESP32, upload an ILI9341 driver module, then run the example script shown below.</span></div>
+        <div class="step"><div class="step-num">4</div><strong>MicroPython setup</strong><br><span style="color:var(--muted)">Flash a MicroPython firmware build for ESP32, upload an ST7789-compatible driver module, then run the example script shown below.</span></div>
       </div>
       <div class="grid-2" style="margin-top:22px">
         <div class="card">
           <h3>Arduino example</h3>
-<pre>#include &lt;TFT_eSPI.h&gt;
+<pre>// TFT_eSPI User_Setup.h:
+// #define ST7789_DRIVER
+// #define TFT_WIDTH  240
+// #define TFT_HEIGHT 320
+// #define TFT_MISO   12
+// #define TFT_MOSI   13
+// #define TFT_SCLK   14
+// #define TFT_CS     15
+// #define TFT_DC      2
+// #define TFT_RST    -1
+// #define TFT_BL     21
+
+#include &lt;TFT_eSPI.h&gt;
 
 TFT_eSPI tft = TFT_eSPI();
 
@@ -399,7 +411,7 @@ void setup() {
   tft.setRotation(1);
   tft.fillScreen(TFT_BLACK);
   tft.setTextColor(TFT_WHITE, TFT_BLACK);
-  tft.drawString("Hello Aurevita", 40, 120, 4);
+  tft.drawString("ESP32 + ST7789", 40, 120, 4);
 }
 
 void loop() {
@@ -408,13 +420,24 @@ void loop() {
         <div class="card">
           <h3>MicroPython example</h3>
 <pre>from machine import Pin, SPI
-import ili9341
+import st7789py as st7789
 
-spi = SPI(1, baudrate=40000000, sck=Pin(18), mosi=Pin(23), miso=Pin(19))
-display = ili9341.ILI9341(spi, cs=Pin(5), dc=Pin(2), rst=Pin(4))
+# Display SPI pins for ESP32-2432S028:
+# SCLK=GPIO14, MOSI=GPIO13, MISO=GPIO12
+spi = SPI(1, baudrate=40000000,
+          sck=Pin(14), mosi=Pin(13), miso=Pin(12))
 
-display.fill(0)
-display.text("Hello Aurevita", 30, 120)</pre>
+display = st7789.ST7789(
+    spi, 240, 320,
+    reset=None,
+    dc=Pin(2),
+    cs=Pin(15),
+    backlight=Pin(21)
+)
+
+display.init()
+display.fill(st7789.BLACK)
+display.text("ESP32 + ST7789", 30, 120, st7789.WHITE)</pre>
         </div>
       </div>
     </div>
@@ -422,36 +445,18 @@ display.text("Hello Aurevita", 30, 120)</pre>
 
   <section id="downloads">
     <div class="container">
-      <h2 class="section-title">Downloads and demo resources</h2>
-      
+      <h2 class="section-title">Downloads and firmware</h2>
+
       <div class="download-list">
         <div class="download">
           <div><strong>Flash Download Tool</strong><small>Use this tool to write BIN firmware to the board.</small></div>
           <a class="btn btn-primary" href="ESP32_Flash_Download_Tool_v3_9_3.zip" download>Download</a>
         </div>
         <div class="download">
-          <div><strong>LVGL Demo 2.8R</strong><small>Graphical demo firmware for screen and UI testing.</small></div>
-          <a class="btn btn-primary" href="LVGL_DEMO_2_8R.bin" download>Download</a>
-        </div>
-        <div class="download">
-          <div><strong>RGB JPG Demo</strong><small>Sample display firmware for image and color output.</small></div>
-          <a class="btn btn-primary" href="RGB_JPG_Demo.bin" download>Download</a>
-        </div>
-        <div class="download">
-          <div><strong>Clock Demo 22:12</strong><small>Clock-style firmware for quick visual verification.</small></div>
-          <a class="btn btn-primary" href="Clock_Demo_22_12.bin" download>Download</a>
-        </div>
-        <div class="download">
-          <div><strong>Ripple Transition Demo</strong><small>Animated effect demo firmware.</small></div>
-          <a class="btn btn-primary" href="Ripple_Transition_Demo.bin" download>Download</a>
-        </div>
-        <div class="download">
-          <div><strong>Color Test Demo</strong><small>Screen color verification firmware.</small></div>
-          <a class="btn btn-primary" href="Color_Test_Demo.bin" download>Download</a>
+          <div><strong>Firmware</strong><small>Firmware file for the ESP32 2.8-inch ST7789 display module.</small></div>
+          <a class="btn btn-primary" href="firmware.bin" download>Download</a>
         </div>
       </div>
-
-      
     </div>
   </section>
 
