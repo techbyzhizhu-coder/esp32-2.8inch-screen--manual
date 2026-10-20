@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ESP32 2.8\" ST7789 TFT Touch Display Module | Official Guide</title>
-  <meta name="description" content="Official quick start guide, specifications, pinout, Arduino and MicroPython examples, and firmware downloads for the ESP32 2.8-inch ST7789 TFT touch display module." />
+  <title>ESP32 2.8-inch TFT Touch Display Module | ST7789P3 User Guide</title>
+  <meta name="description" content="ST7789P3 quick start guide, hardware specifications, pinout, Arduino and MicroPython setup notes, and LVGL demo firmware downloads for the ESP32 2.8-inch TFT touch display module." />
   <style>
     :root{
       --bg:#0b1020;
@@ -189,7 +189,7 @@
     <div class="nav-inner">
       <div class="brand">
         <div class="brand-badge">E</div>
-        <div>ESP32 2.8\" ST7789 TFT Display</div>
+        <div>ESP32 2.8-inch TFT Display</div>
       </div>
       <div class="nav-links">
         <a href="#features">Features</a>
@@ -208,20 +208,20 @@
         <div class="eyebrow"><span class="dot"></span> Beginner-friendly smart display board for makers, students, and engineers</div>
         <h1>Build colorful ESP32 interfaces in minutes.</h1>
         <p>
-          A compact <strong>2.8-inch ST7789 TFT touch display module</strong> powered by ESP32, built for fast prototyping,
-          UI demos, sensor dashboards, and Wi-Fi connected projects. This page includes the official quick start guide,
-          core specifications, pinout reference, sample code, and firmware download.
+          A compact <strong>2.8-inch TFT touch display module with an ST7789P3 LCD controller</strong>, powered by ESP32
+          for fast prototyping, UI demos, sensor dashboards, and Wi-Fi connected projects. This page includes the quick start
+          guide, core specifications, pinout reference, setup examples, and LVGL demo firmware downloads.
         </p>
         <div class="badges">
-          <span class="badge">ST7789 Driver</span>
-          <span class="badge">320 × 240 Resolution</span>
+          <span class="badge">ST7789P3 Driver</span>
+          <span class="badge">240 × 320 Native Resolution</span>
           <span class="badge">XPT2046 Touch</span>
           <span class="badge">Wi-Fi + Bluetooth</span>
           <span class="badge">TF Card Slot</span>
           <span class="badge">Arduino + MicroPython</span>
         </div>
         <div class="cta-row">
-          <a class="btn btn-primary" href="#downloads">⬇ Download Firmware</a>
+          <a class="btn btn-primary" href="#downloads">⬇ Download Demo Pack</a>
           <a class="btn btn-secondary" href="#quickstart">⚡ Start in 5 Minutes</a>
           <a class="btn btn-secondary" href="#pinout">🔎 View Pinout</a>
         </div>
@@ -247,7 +247,7 @@
     <div class="container">
       <h2 class="section-title">Why customers choose this display board</h2>
       <p class="section-sub">
-        This module is designed to lower the barrier to embedded UI development. Beginners can flash the supplied firmware quickly,
+        This module is designed to lower the barrier to embedded UI development. Beginners can flash demo firmware quickly,
         while engineers can build custom interfaces with Arduino or MicroPython.
       </p>
       <div class="grid-3">
@@ -259,7 +259,7 @@
         <div class="card">
           <div class="icon">🎨</div>
           <h3>Bright 2.8-inch TFT screen</h3>
-          <p>2.8-inch TFT panel driven by ST7789 with 320 × 240 resolution and 65K color output for dashboards, clocks, and UI demos.</p>
+          <p>2.8-inch TFT panel driven by the ST7789P3 display controller, with a native 240 × 320 resolution (320 × 240 in landscape orientation) and 65K RGB color output for dashboards, clocks, and UI demos.</p>
         </div>
         <div class="card">
           <div class="icon">👆</div>
@@ -279,7 +279,7 @@
         <div class="card">
           <div class="icon">🧪</div>
           <h3>Made for demos and learning</h3>
-          <p>Includes a flash download tool and the supplied firmware so users can verify the hardware before writing code.</p>
+          <p>Includes flash tool package and multiple demo firmware files so users can verify the hardware before writing code.</p>
         </div>
       </div>
     </div>
@@ -326,9 +326,9 @@
           <tr><th>Compute capability</th><td>Up to 600 DMIPS</td></tr>
           <tr><th>SRAM</th><td>520 KB</td></tr>
           <tr><th>Display type</th><td>2.8-inch TFT LCD</td></tr>
-          <tr><th>Display driver</th><td>ST7789</td></tr>
+          <tr><th>Display driver</th><td>ST7789P3 (ST7789 family)</td></tr>
           <tr><th>Touch controller</th><td>XPT2046</td></tr>
-          <tr><th>Resolution</th><td>320 × 240</td></tr>
+          <tr><th>Resolution</th><td>240 × 320 native portrait; 320 × 240 landscape</td></tr>
           <tr><th>Display colors</th><td>65K RGB colors</td></tr>
           <tr><th>Active viewing area</th><td>43.2 × 57.6 mm</td></tr>
           <tr><th>Viewing angle</th><td>Greater than 60°</td></tr>
@@ -352,7 +352,7 @@
     <div class="container">
       <h2 class="section-title">Pinout and interface reference</h2>
       <p class="section-sub">
-        The board image below has been translated into English and reorganized for easier setup. Touch, storage, RGB LED, and expansion connectors are shown on the board diagram.
+        The board image below shows the connector layout. The LCD uses SPI; the LCD reset is tied to ESP32 EN, while the touch panel uses the XPT2046 controller.
       </p>
       <div class="pin-layout">
         <div class="card">
@@ -362,7 +362,8 @@
           <h3>Core pin groups</h3>
           <table class="mini-table">
             <tr><th>Function group</th><th>GPIO mapping</th></tr>
-            <tr><td>Touch controller</td><td>CLK IO25, CS IO33, DIN IO32, OUT IO39, IRQ IO36</td></tr>
+            <tr><td>LCD (ST7789P3)</td><td>SCK IO14, MOSI IO13, MISO IO12, CS IO15, DC IO2; reset tied to EN</td></tr>
+            <tr><td>Touch controller (XPT2046)</td><td>CLK IO25, CS IO33, DIN IO32, OUT IO39, IRQ IO36</td></tr>
             <tr><td>Backlight LED</td><td>IO21</td></tr>
             <tr><td>TF card</td><td>CD/DAT3 IO5, CMD IO23, CLK IO18, DAT0 IO19</td></tr>
             <tr><td>RGB LED</td><td>IO17, IO4, IO16</td></tr>
@@ -383,24 +384,22 @@
       
       <div class="steps">
         <div class="step"><div class="step-num">1</div><strong>Connect the board</strong><br><span style="color:var(--muted)">Use a USB cable to connect the module to your computer. The board supports USB power and data.</span></div>
-        <div class="step"><div class="step-num">2</div><strong>Test with firmware</strong><br><span style="color:var(--muted)">Use the included flash download tool and the supplied firmware BIN file to verify the screen and touch hardware quickly.</span></div>
-        <div class="step"><div class="step-num">3</div><strong>Arduino setup</strong><br><span style="color:var(--muted)">Install Arduino IDE, add ESP32 board support, and install the TFT_eSPI library. Then configure the library for your board version.</span></div>
-        <div class="step"><div class="step-num">4</div><strong>MicroPython setup</strong><br><span style="color:var(--muted)">Flash a MicroPython firmware build for ESP32, upload an ST7789-compatible driver module, then run the example script shown below.</span></div>
+        <div class="step"><div class="step-num">2</div><strong>Test with demo firmware</strong><br><span style="color:var(--muted)">Choose one of the supplied LVGL demo BINs. These are merged flash images; flash the complete image at 0x00000000, and verify firmware compatibility with your ST7789P3 board revision.</span></div>
+        <div class="step"><div class="step-num">3</div><strong>Arduino setup</strong><br><span style="color:var(--muted)">Install Arduino IDE, add ESP32 board support, and configure TFT_eSPI for ST7789P3 using the LCD pins shown in the pinout table.</span></div>
+        <div class="step"><div class="step-num">4</div><strong>MicroPython setup</strong><br><span style="color:var(--muted)">Install an ST7789 MicroPython driver compatible with your firmware. Use SCK GPIO14, MOSI GPIO13, MISO GPIO12, CS GPIO15, and DC GPIO2. LCD reset is tied to ESP32 EN.</span></div>
       </div>
       <div class="grid-2" style="margin-top:22px">
         <div class="card">
-          <h3>Arduino example</h3>
-<pre>// TFT_eSPI User_Setup.h:
+          <h3>Arduino example (TFT_eSPI)</h3>
+<pre>// Configure TFT_eSPI/User_Setup.h for this board before compiling:
 // #define ST7789_DRIVER
-// #define TFT_WIDTH  240
-// #define TFT_HEIGHT 320
-// #define TFT_MISO   12
-// #define TFT_MOSI   13
-// #define TFT_SCLK   14
-// #define TFT_CS     15
-// #define TFT_DC      2
-// #define TFT_RST    -1
-// #define TFT_BL     21
+// #define TFT_MISO 12
+// #define TFT_MOSI 13
+// #define TFT_SCLK 14
+// #define TFT_CS   15
+// #define TFT_DC    2
+// #define TFT_RST  -1  // LCD reset is tied to ESP32 EN
+// #define TFT_BL   21
 
 #include &lt;TFT_eSPI.h&gt;
 
@@ -408,36 +407,28 @@ TFT_eSPI tft = TFT_eSPI();
 
 void setup() {
   tft.init();
-  tft.setRotation(1);
+  tft.setRotation(1);  // Landscape: 320 x 240
   tft.fillScreen(TFT_BLACK);
   tft.setTextColor(TFT_WHITE, TFT_BLACK);
-  tft.drawString("ESP32 + ST7789", 40, 120, 4);
+  tft.drawString("Hello ESP32", 40, 120, 4);
 }
 
 void loop() {
 }</pre>
         </div>
         <div class="card">
-          <h3>MicroPython example</h3>
+          <h3>MicroPython setup (ST7789 driver)</h3>
 <pre>from machine import Pin, SPI
-import st7789py as st7789
+import st7789
 
-# Display SPI pins for ESP32-2432S028:
-# SCLK=GPIO14, MOSI=GPIO13, MISO=GPIO12
 spi = SPI(1, baudrate=40000000,
           sck=Pin(14), mosi=Pin(13), miso=Pin(12))
 
-display = st7789.ST7789(
-    spi, 240, 320,
-    reset=None,
-    dc=Pin(2),
-    cs=Pin(15),
-    backlight=Pin(21)
-)
-
-display.init()
-display.fill(st7789.BLACK)
-display.text("ESP32 + ST7789", 30, 120, st7789.WHITE)</pre>
+# LCD: 240 x 320; CS=15; DC=2; backlight=21
+# LCD reset is tied to ESP32 EN (no separate reset GPIO).
+# ST7789 MicroPython libraries use different constructor APIs.
+# Initialize st7789.ST7789 using the pins above according to
+# the documentation for the driver package you installed.</pre>
         </div>
       </div>
     </div>
@@ -445,16 +436,33 @@ display.text("ESP32 + ST7789", 30, 120, st7789.WHITE)</pre>
 
   <section id="downloads">
     <div class="container">
-      <h2 class="section-title">Downloads and firmware</h2>
+      <h2 class="section-title">Downloads and LVGL demo resources</h2>
+      <p class="section-sub">The following LVGL demo BINs are provided for testing. Each file is a merged ESP32 flash image; flash the complete image at 0x00000000 using a compatible ESP32 flash tool. Use firmware built for the exact ST7789P3 board revision.</p>
 
       <div class="download-list">
         <div class="download">
-          <div><strong>Flash Download Tool</strong><small>Use this tool to write BIN firmware to the board.</small></div>
+          <div><strong>Flash Download Tool</strong><small>Use this tool to write the supplied merged BIN image to the ESP32 board.</small></div>
           <a class="btn btn-primary" href="ESP32_Flash_Download_Tool_v3_9_3.zip" download>Download</a>
         </div>
         <div class="download">
-          <div><strong>Firmware</strong><small>Firmware file for the ESP32 2.8-inch ST7789 display module.</small></div>
-          <a class="btn btn-primary" href="firmware.bin" download>Download</a>
+          <div><strong>LVGL Demo — Music</strong><small>Music-player interface demo for testing screen rendering.</small></div>
+          <a class="btn btn-primary" href="lvgl_demo_music.bin" download>Download BIN</a>
+        </div>
+        <div class="download">
+          <div><strong>LVGL Demo — Stress</strong><small>Stress-test interface for checking rendering stability under load.</small></div>
+          <a class="btn btn-primary" href="lvgl_demo_stress.bin" download>Download BIN</a>
+        </div>
+        <div class="download">
+          <div><strong>LVGL Demo — Widgets</strong><small>Showcase of LVGL interface widgets and controls.</small></div>
+          <a class="btn btn-primary" href="lvgl_demo_widgets.bin" download>Download BIN</a>
+        </div>
+        <div class="download">
+          <div><strong>LVGL Demo — Benchmark</strong><small>Graphics benchmark for evaluating display rendering performance.</small></div>
+          <a class="btn btn-primary" href="lvgl_demo_benchmark.bin" download>Download BIN</a>
+        </div>
+        <div class="download">
+          <div><strong>LVGL Demo — Keypad Encoder</strong><small>LVGL keypad/encoder interface demo; input behavior depends on the firmware configuration.</small></div>
+          <a class="btn btn-primary" href="lvgl_demo_keypad_encoder.bin" download>Download BIN</a>
         </div>
       </div>
     </div>
@@ -467,21 +475,21 @@ display.text("ESP32 + ST7789", 30, 120, st7789.WHITE)</pre>
         <div>
           <details open>
             <summary>The screen does not light up. What should I check?</summary>
-            <p>Check USB power first, then confirm the board was flashed successfully. If your firmware controls backlight separately, verify the backlight pin configuration.</p>
+            <p>Check USB power and confirm that the firmware matches the ST7789P3 board revision. The backlight control pin is GPIO21. If the board was flashed but the screen remains blank, verify the flash offset and restart the board.</p>
           </details>
           <details>
             <summary>The display shows noise or corrupted graphics.</summary>
-            <p>This is usually caused by incorrect display pin mapping, SPI configuration, or a mismatched TFT_eSPI setup file. Verify the board-specific library settings.</p>
+            <p>Confirm that the firmware was built for the ST7789P3 controller and that the native resolution is 240 × 320. For Arduino projects, verify the ST7789 driver selection, SPI pins, rotation, and color order.</p>
           </details>
           <details>
             <summary>Touch input is not responding.</summary>
-            <p>Confirm the XPT2046 touch pins match the board diagram. Touch also needs the correct CS and IRQ configuration in your code.</p>
+            <p>Confirm the XPT2046 pins: CLK GPIO25, CS GPIO33, DIN GPIO32, OUT GPIO39, and IRQ GPIO36. The touch controller is separate from the ST7789 LCD driver.</p>
           </details>
         </div>
         <div>
           <details open>
             <summary>The board cannot be detected for flashing.</summary>
-            <p>Try a different USB cable, install the correct serial driver if required by your PC, and confirm the correct COM port is selected in the flash tool or IDE.</p>
+            <p>Try a data-capable USB cable, install the correct USB-to-serial driver if needed, and select the correct COM port. The supplied BINs are merged flash images; flash the complete image at 0x00000000 with a compatible ESP32 flash tool.</p>
           </details>
           <details>
             <summary>Which language should beginners start with?</summary>
